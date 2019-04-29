@@ -1,14 +1,16 @@
-package main
+package RequestHandlers
 
 //É necessario função invoke em invoker que retorne []byte 
 
 import (
+	"bufio"
 	"fmt"
 	"log"
 	"net"
 	"io"
 	"json"
 	"../Invoker"
+	"os"
 )
 
 /*type handleItf struct{

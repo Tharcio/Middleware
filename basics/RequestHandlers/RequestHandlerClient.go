@@ -1,5 +1,5 @@
 
-package main
+package RequestHandlers
 
 import (
 	"MiddlewareImplementation/basics/Shared"
@@ -8,7 +8,6 @@ import (
 	"fmt"
 	"log"
 	"net"
-	"io"
 )
 
 type handleItf struct{
@@ -22,7 +21,7 @@ type MsgsUser struct {
 	msgs map[string] [] byte
 }
 
-func sendHandler(chatmsg Shared.ChatMsg, aor Shared.AOR, fCall string){
+func SendHandler(chatmsg Shared.ChatMsg, aor Shared.AOR, fCall string){
 	msgUser := MsgsUser{map[string][]byte{}}
 	chatMsgByte, err1 := json.Marshal(chatmsg)
 	if err1 != nil {
@@ -30,11 +29,11 @@ func sendHandler(chatmsg Shared.ChatMsg, aor Shared.AOR, fCall string){
 	}
 	//msgRequestBytes,_:= json.Marshal(chatmsg)
 	h := handleItf{chatMsgByte, aor.IP + ":" + string(aor.Port), string(aor.OID), fCall}
-	msgUser.msgs[chatmsg.User] = h.handler()
+	msgUser.msgs[chatmsg.User] = h.handler(fCall) //me parece desnecessário o argumento da função handler
 
 }
 
-func listenHandler(){
+func ListenHandler(){
 	
 }
 
@@ -55,7 +54,7 @@ func (h *handleItf) handler(fCall string) []byte{
 			_,errW = l.Write(marshalled_h)
 		}
 
-		reply, _ := bufio.NewReader(l).ReadString('\n') //isso esta lendo uma string, mas o método retorna array de byte, fiz o cast, mas o ideal seria ler diretamente
+		reply, _ := bufio.NewReader(l).ReadString('\n') //isso esta lendo uma string, mas o método retorna array de byte, fiz o cast, mas o ideal seria ler diretamente o mesmo tipo do retorno
 		return []byte(reply)
 		
 	}

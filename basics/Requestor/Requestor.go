@@ -1,6 +1,6 @@
 package Requestor
 import (
-	"MiddlewareImplementation/basics/Shared"
+	"../Shared"
 	"fmt"
 	"log"
 	"net"
@@ -12,19 +12,25 @@ func Invoke(remote_object Shared.AOR,typeMsg string, action string, args interfa
 	//interface{} significa qualquer tipo (usado em reflection)
 	if typeMsg == "Chat"{
 		if action == "Send"{
-			RequestHandlers.sendHandler(c,typeMsg)
-		}
-		if action =="Listen"{
-			RequestHandlers.listenHandler()
+			RequestHandlers.SendHandler(args.(Shared.ChatMsg),remote_object,action)
+		} else {
+			RequestHandlers.ListenHandler()
 		}
 	}else if typeMsg == "File Transfer" {
 		if action == "Send" {
 
-		}
-		if action == "Listen" {
+		} else if action == "List" {
+
+		} else {
 
 		}
 	} else {
+		if action == "Bind" {
 
+		} else if action == "Lookup" {
+
+		} else {
+
+		}
 	}
 }
