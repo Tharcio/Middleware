@@ -5,8 +5,9 @@ import "reflect"
 type FileTransfer struct {
 	Files map[string] [] byte
 }
-func (ft FileTransfer) Send(Msg string, File [] byte){
-	ft.Files[Msg]=File //no maximo retorna o status da operação
+func (ft FileTransfer) Send(Msg string, File [] byte) string {
+	ft.Files[Msg]=File
+	return "YOU SENT A FILE"
 }
 func (ft FileTransfer) Download(nome string) [] byte{
 	return ft.Files[nome]

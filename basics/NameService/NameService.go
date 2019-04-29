@@ -8,8 +8,9 @@ import (
 type Naming struct {
 	Lookup_table map[string] Shared.AOR
 }
-func (o Naming) Bind(service_name string, aor Shared.AOR) {
-	o.Lookup_table[service_name] = aor; //no maximo retorna o status da operação
+func (o Naming) Bind(service_name string, aor Shared.AOR) string {
+	o.Lookup_table[service_name] = aor;
+	return "NAME REGISTERED"
 }
 func (o Naming) Lookup(service_name string) Shared.AOR{
 	return o.Lookup_table[service_name]

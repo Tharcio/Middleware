@@ -10,8 +10,8 @@ type FT struct {
 	OID int
 }
 
-func (ft FT) Send(Msg string, File [] byte){
-	Requestor.Invoke(ft, "FileTransfer", "Send", [Msg, File]) //no máximo retorna o tipo da operação
+func (ft FT) Send(Msg string, File [] byte) string {
+	return Requestor.Invoke(ft, "FileTransfer", "Send", [Msg, File]) //retorna o tipo da operação
 }
 func (ft FT) Download(nome string) []byte {
 	return Requestor.Invoke(ft, "FileTransfer", "Download", [nome]); //converter para o tipo de retorno

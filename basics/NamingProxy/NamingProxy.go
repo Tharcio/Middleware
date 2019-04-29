@@ -11,8 +11,8 @@ type NS struct {
 	OID int
 }
 
-func (o NS) Bind(service_name string, aor Shared.AOR) {
-	Requestor.Invoke(o,  "Naming", "Bind", [service_name, aor]) //no maximo retorna o status da operação
+func (o NS) Bind(service_name string, aor Shared.AOR) string {
+	return Requestor.Invoke(o,  "Naming", "Bind", [service_name, aor]) // retorna o status da operação
 }
 func (o NS) Lookup(service_name string) Shared.AOR{
 	return Requestor.Invoke(o,  "Naming", "Lookup", [service_name]);

@@ -8,7 +8,8 @@ import (
 	"../RequestHandlers"
 )
 
-func Invoke(c Shared.AOR,typeMsg string, action string, c Shared.chatMsg){ //invoke tem que ser um método só
+func Invoke(c Shared.AOR,typeMsg string, action string, c Shared.chatMsg) interface{}{ //invoke tem que ser um método só
+	//interface{} significa que o método pode retornar qualquer coisa (usado em reflection)
 	if typeMsg == "Chat"{
 		if action == "Send"{
 			RequestHandlers.sendHandler(c)
