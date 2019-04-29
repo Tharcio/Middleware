@@ -22,7 +22,7 @@ type MsgsUser struct {
 func sendHandler(chatmsg Shared.chatMsg, aor Shared.AOR){
 	msgUser := MsgsUser{[]}
 	msgRequestBytes,_:= json.Marshal(chatmsg)
-	h := handleReq{msgRequestBytes, aor.IP ++ ":" +aor.Port ++ ""}
+	h := handleReq{msgRequestBytes, aor.IP ++ ":" ++aor.Port ++ ""}
 	msgUser.msgs[chatmsg.user] = h.handler()
 
 }

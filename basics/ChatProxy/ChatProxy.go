@@ -12,8 +12,8 @@ type Chat struct {
 }
 
 func (c Chat) Send(Msg string, User string) string{
-	return Requestor.Invoke(c, "Chat", "Send", Shared.chatMsg{Msg, User}) //converter para string
+	return Requestor.Invoke(Shared.AOR(c), "Chat", "Send", Shared.ChatMsg{Msg, User}).(string)
 }
 func (c Chat) Listen() [] string{
-	return Requestor.Invoke(c, "Chat", "Listen", []) //converter para o tipo desejado na saída
+	return Requestor.Invoke(Shared.AOR(c), "Chat", "Listen", nil).([]string) //converter para o tipo desejado na saída
 }

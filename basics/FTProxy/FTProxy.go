@@ -2,6 +2,7 @@ package FTProxy
 
 import (
 	"MiddlewareImplementation/basics/Requestor"
+	"MiddlewareImplementation/basics/Shared"
 )
 
 type FT struct {
@@ -10,12 +11,12 @@ type FT struct {
 	OID int
 }
 
-func (ft FT) Send(Msg string, File [] byte) string {
-	return Requestor.Invoke(ft, "FileTransfer", "Send", [Msg, File]) //retorna o tipo da operação
+func (ft FT) Send(Name string, File [] byte) string {
+	return (Requestor.Invoke(Shared.AOR(ft), "FileTransfer", "Send", Shared.FTMsg{File,Name})).(string) //retorna string
 }
 func (ft FT) Download(nome string) []byte {
-	return Requestor.Invoke(ft, "FileTransfer", "Download", [nome]); //converter para o tipo de retorno
+	return (Requestor.Invoke(Shared.AOR(ft), "FileTransfer", "Download", nome)).([] byte) //converter para o tipo de retorno
 }
 func (ft FT) List() [] string {
-	return Requestor.Invoke(ft, "FileTransfer", "List", []) //converter para o tipo de retorno
+	return Requestor.Invoke(Shared.AOR(ft), "FileTransfer", "List", nil).([] string) //converter para o tipo de retorno
 }

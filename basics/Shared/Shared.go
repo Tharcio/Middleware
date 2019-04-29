@@ -6,12 +6,16 @@ type AOR struct {
 	OID int
 }
 
-type chatMsg struct{
+type ChatMsg struct{
 	msg string
 	user string
 }
 
 type FTMsg struct{
 	file []byte
-	user string
+	file_name string
 }
+ type BindMessage struct {
+ 	service_name string
+ 	AOR AOR
+ }
