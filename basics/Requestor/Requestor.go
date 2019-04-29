@@ -1,36 +1,18 @@
 package Requestor
 import (
-	"../Shared"
+	"MiddlewareImplementation/basics/Shared"
+	"encoding/json"
 	"fmt"
-	"log"
-	"net"
-	"io"
-	"../RequestHandlers"
+	. "MiddlewareImplementation/basics/RequestHandlers"
 )
 
 func Invoke(remote_object Shared.AOR,typeMsg string, action string, args interface{}) interface{}{ //invoke tem que ser um método só
 	//interface{} significa qualquer tipo (usado em reflection)
-	if typeMsg == "Chat"{
-		if action == "Send"{
-			RequestHandlers.SendHandler(args.(Shared.ChatMsg),remote_object,action)
-		} else {
-			RequestHandlers.ListenHandler()
-		}
-	}else if typeMsg == "File Transfer" {
-		if action == "Send" {
-
-		} else if action == "List" {
-
-		} else {
-
-		}
-	} else {
-		if action == "Bind" {
-
-		} else if action == "Lookup" {
-
-		} else {
-
-		}
+	var crh = CRH{remote_object.IP+string(remote_object.Port)}
+	msg := Shared.RequestFormat{args,remote_object.OID, action}
+	msgBytes, err1 := json.Marshal(msg)
+	if err1 != nil {
+		fmt.Println("erro ao tentar converter a mensagem em json")
 	}
+	return crh.Send(msgBytes)
 }

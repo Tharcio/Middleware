@@ -29,6 +29,12 @@ type FTMsg struct{
 	File_name string
 }
  type BindMessage struct {
- 	service_name string
+ 	Service_name string
  	AOR AOR
  }
+
+type RequestFormat struct {
+	Args interface{}
+	OID int
+	Function string
+} 
