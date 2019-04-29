@@ -5,6 +5,9 @@ import (
 	"io"
 )
 
-func Invoke(c Shared.AOR, string, string, ){
 
+func (h* handleItf)Invoke(){
+	if h.fcall == "Chat"{
+
+	}
 }

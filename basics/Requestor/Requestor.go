@@ -12,19 +12,19 @@ func Invoke(remote_object Shared.AOR,typeMsg string, action string, args interfa
 	//interface{} significa qualquer tipo (usado em reflection)
 	if typeMsg == "Chat"{
 		if action == "Send"{
-			RequestHandlers.sendHandler(c)
+			RequestHandlers.sendHandler(c,typeMsg)
 		}
 		if action =="Listen"{
 			RequestHandlers.listenHandler()
 		}
-	}else{
-		if typeMsg == "File Transfer"{
-			if action == "Send"{
-	
-			}
-			if action =="Listen"{
-	
-			}
+	}else if typeMsg == "File Transfer" {
+		if action == "Send" {
+
 		}
+		if action == "Listen" {
+
+		}
+	} else {
+
 	}
 }

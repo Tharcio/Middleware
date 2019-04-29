@@ -7,23 +7,35 @@ import (
 	"log"
 	"net"
 	"io"
+	"json"
 	"../Invoker"
 )
 
-type handleRep struct{
+/*type handleItf struct{
 	data []byte
-	size int
 	addressPort string
 }
-
-func (h *handleRep) handlerRecieve(){
+*/
+func (h *handleItf) handlerRecieve(){
 	for {
+		l, err := net.Listen("tcp", h.addressPort)
+		if err != nil {
+			log.Fatal(err)
+		}
 		conn, err := l.Accept()
 		if err != nil {
 			log.Fatal(err)
 		}
 		go func(c net.Conn) {
 			// Echo all incoming data.
+			mensagem, erro3 := bufio.NewReader(conn).ReadString('\n')
+			if erro3 != nil {
+				fmt.Println(erro3)
+				os.Exit(3)
+			}
+			msgRecived := handleItf{[],"","",""}
+			UmsrMsg := json.Unmarshall(mensagem,&h)
+
 
 			//c.Write(h.data)
 			//c.Close()
@@ -59,8 +71,5 @@ func (h *handleRep) handlerSend(){
 
 func main() {
 	//handleRep{[],0,":8081",}
-	l, err := net.Listen("tcp", h.addressPort)
-	if err != nil {
-		log.Fatal(err)
-	}
+	
 }

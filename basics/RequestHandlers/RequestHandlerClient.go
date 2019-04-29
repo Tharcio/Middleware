@@ -1,3 +1,4 @@
+
 package main
 
 import (
@@ -10,20 +11,26 @@ import (
 	"io"
 )
 
-type handleReq struct{
+type handleItf struct{
 	data []byte
 	addressPort string
+	oid string
+	fcall string
 }
 
 type MsgsUser struct {
 	msgs map[string] [] byte
 }
 
-func sendHandler(chatmsg Shared.chatMsg, aor Shared.AOR){
-	msgUser := MsgsUser{[]}
-	msgRequestBytes,_:= json.Marshal(chatmsg)
-	h := handleReq{msgRequestBytes, aor.IP ++ ":" ++aor.Port ++ ""}
-	msgUser.msgs[chatmsg.user] = h.handler()
+func sendHandler(chatmsg Shared.ChatMsg, aor Shared.AOR, fCall string){
+	msgUser := MsgsUser{map[string][]byte{}}
+	chatMsgByte, err1 := json.Marshal(chatmsg)
+	if err1 != nil {
+		fmt.Println("erro ao tentar converter a mensagem em json");
+	}
+	//msgRequestBytes,_:= json.Marshal(chatmsg)
+	h := handleItf{chatMsgByte, aor.IP + ":" + string(aor.Port), string(aor.OID), fCall}
+	msgUser.msgs[chatmsg.User] = h.handler()
 
 }
 
@@ -31,7 +38,7 @@ func listenHandler(){
 	
 }
 
-func (h *handleReq) handler() []byte{
+func (h *handleItf) handler(fCall string) []byte{
 	l, err := net.Dial("tcp", h.addressPort)
 	if err != nil {
 		log.Fatal(err)
@@ -39,13 +46,17 @@ func (h *handleReq) handler() []byte{
 	defer l.Close()	
 	for {
 		// send to socket
-		_,errW := conn.Write([]byte(text))
+		marshalled_h, err := json.Marshal(h);
+		if (err != nil) {
+			fmt.Println("erro ao tentar converter handleItf em json");
+		}
+		_,errW := l.Write(marshalled_h);
 		for errW != nil{
-			_,errW := conn.Write([]byte(text))
+			_,errW = l.Write(marshalled_h)
 		}
 
-		reply, _ := bufio.NewReader(conn).ReadString('\n')
-		return reply
+		reply, _ := bufio.NewReader(l).ReadString('\n') //isso esta lendo uma string, mas o método retorna array de byte, fiz o cast, mas o ideal seria ler diretamente
+		return []byte(reply)
 		
 	}
 }
