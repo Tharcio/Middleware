@@ -14,17 +14,27 @@ O servidor não pode ter o seu ip setado dentro da parte do middleware(so relemb
 */
 
 type AOR struct {
-	IP string,
-	port int,
-	oid int
+	IP string
+	Port int
+	OID int
 }
 
-type chatMsg struct{
-	msg string,
-	user string
+type ChatMsg struct{
+	Msg string
+	User string
 }
 
 type FTMsg struct{
-	file byte[],
-	user string
+	File []byte
+	File_name string
 }
+ type BindMessage struct {
+ 	Service_name string
+ 	AOR AOR
+ }
+
+type RequestFormat struct {
+	Args interface{}
+	OID int
+	Function string
+} 

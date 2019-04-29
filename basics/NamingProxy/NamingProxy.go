@@ -5,12 +5,18 @@ import (
 	"MiddlewareImplementation/basics/Shared"
 )
 
-func (o Shared.AOR) bind(service_name string, aor Shared.AOR) {
-	return Requestor.Invoke(o.Aor, "Naming", "bind", [service_name, aor]);
+type NS struct {
+	IP string
+	Port int
+	OID int
 }
-func (o Shared.AOR) lookup(service_name string) Shared.AOR{
-	return Requestor.Invoke(o.Aor, "Naming", "lookup", [service_name]);
+
+func (o NS) Bind(service_name string, aor Shared.AOR) string {
+	return Requestor.Invoke(Shared.AOR(o),  "Naming", "Bind", Shared.BindMessage{service_name,aor}).(string) // retorna o status da operação
 }
-func (o Shared.AOR) list() {
-	return Requestor.Invoke(o.Aor, "Naming", "list", []);
+func (o NS) Lookup(service_name string) Shared.AOR{
+	return Requestor.Invoke(Shared.AOR(o),  "Naming", "Lookup", service_name).(Shared.AOR);
+}
+func (o NS) List() []string {
+	return Requestor.Invoke(Shared.AOR(o), "Naming", "List", nil).([] string);
 }

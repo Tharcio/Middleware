@@ -1,8 +1,12 @@
+package main
+
 import(
 	"MiddlewareImplementation/basics/ChatProxy"
 	"MiddlewareImplementation/basics/NamingProxy"
 	"bufio"
 	"fmt"
+	"os"
+	"strings"
 )
 func main() {
 	reader := bufio.NewReader(os.Stdin);
@@ -16,22 +20,31 @@ func main() {
 	fmt.Println("para enviar mensagens basta digitá-las e apertar enter");
 	fmt.Println("escreva \":f \" + nome do arquivo para enviar e \":d \" + nome do arquivo para baixar e em seguida aperte enter");
 	fmt.Println("escreva \":l \" e aperte enter para ver os arquivos disponiveis");
-	var nameServer NamingProxy.NameServiceObject{Aor: "127.0.0.1:1024:0"};
-	var chat ChatProxy.Chat{Aor: nameServer.lookup("Chat")};
-	for{
+	nameServer := NamingProxy.NS{"127.0.0.1",1024,0};
+	chat := ChatProxy.Chat(nameServer.Lookup("Chat"));
+	for {
 		//é preciso definir que tipo é esse chat e colocar como tipo que chama nas funcões Listen e Send
 		msgs := chat.Listen();
-		for i:=0; i<len(msgs); i++ {
-			fmt.Println(msgs[i]);		
+		for i := 0; i < len(msgs); i++ {
+			fmt.Println(msgs[i]);
 		}
 		msg, err := reader.ReadString('\n');
-		if err!=nil{
+		if err != nil {
 			fmt.Println("erro ao tentar ler a entrada");
 		}
-		resp := chat.Send(msg);
-		if(msg[:3]==":d "){
-			//tratar download de arquivo
-		}else{
+		resp := chat.Send(msg, user_name);
+		if (msg[:3] == ":d ") { //download de arquivo
+			b := []byte(resp)
+			f, err := os.Create("Download"+msg[(strings.LastIndex(msg,"/")):]);
+			if err != nil {
+				fmt.Print("Você pediu um Download: erro ao criar o arquivo")
+			}
+			_, err2 := f.Write(b);
+			if err2!= nil {
+				fmt.Print("Você pediu um Download: erro ao tentar escrever no arquivo")
+			}
+		} else {
 			fmt.Println(resp);
 		}
+	}
 }

@@ -5,12 +5,18 @@ import (
 	"MiddlewareImplementation/basics/Shared"
 )
 
-func (ft Shared.AOR) Send(Msg string, File [] byte){
-	return Requestor.Invoke(ft.Aor, "FileTransfer", "Send", [Msg, File]);
+type FT struct {
+	IP string
+	Port int
+	OID int
 }
-func (ft Shared.AOR) Download(nome string){
-	return Requestor.Invoke(ft.Aor, "FileTransfer", "Download", [nome]);
+
+func (ft FT) Send(Name string, File [] byte) string {
+	return (Requestor.Invoke(Shared.AOR(ft), "FileTransfer", "Send", Shared.FTMsg{File,Name})).(string) //retorna string
 }
-func (ft Shared.AOR) List(){
-	return Requestor.Invoke(ft.Aor, "FileTransfer", "List", []);
+func (ft FT) Download(nome string) []byte {
+	return (Requestor.Invoke(Shared.AOR(ft), "FileTransfer", "Download", nome)).([] byte) //converter para o tipo de retorno
+}
+func (ft FT) List() [] string {
+	return Requestor.Invoke(Shared.AOR(ft), "FileTransfer", "List", nil).([] string) //converter para o tipo de retorno
 }

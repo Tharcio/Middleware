@@ -1,34 +1,32 @@
 package ChatServer
 
 import (
-	. "MiddlewarImplementation/basics/Shared"
-	. "MiddlewarImplementation/basics/NamingProxy"
-	. "MiddlewarImplementation/basics/FTProxy"
-	"reflect"
-	"strings"
+	"MiddlewareImplementation/basics/FTProxy"
+	"MiddlewareImplementation/basics/NamingProxy"
+	. "strings"
 )
 type Chat struct {
 	Msgs [] string
 }
 
-func (c Chat) Send(Msg string, User string){
-	if(strings.HasPrefix(Msg,":f ")){
-		var naming_server Shared.AOR{IP: "127.0.0.1", Port: 1024, OID: 0}
-		ft := naming_server.lookup("File Transfer")
-		return ft.Send(Msg[3:(strings.LastIndex(Msg,"|"))],[]byte(Msg[(strings.LastIndex(a.Msg,"|")):]))
-	}else if (strings.HasPrefix(Msg,":d ")){
-		var naming_server Shared.AOR{IP: "127.0.0.1", Port: 1024, OID: 0}
-		ft := naming_server.lookup("File Transfer")
-		return ft.Download(Msg[3:])
-	}else if (strings.HasPrefix(Msg,":l ")){
-		var naming_server Shared.AOR{IP: "127.0.0.1", Port: 1024, OID: 0}
-		ft := naming_server.lookup("File Transfer")
-		return ft.List()
+func (c Chat) Send(Msg string, User string) string{
+	if HasPrefix(Msg,":f ") {
+		var naming_server = NamingProxy.NS{IP: "127.0.0.1", Port: 1024, OID: 0}
+		ft := naming_server.Lookup("File Transfer")
+		return FTProxy.FT(ft).Send(Msg[3:(LastIndex(Msg,"|"))],[]byte(Msg[(LastIndex(Msg,"|")):]))
+	}else if HasPrefix(Msg,":d ") {
+		var naming_server = NamingProxy.NS{IP: "127.0.0.1", Port: 1024, OID: 0}
+		ft := naming_server.Lookup("File Transfer")
+		return string(FTProxy.FT(ft).Download(Msg[3:]))
+	}else if HasPrefix(Msg,":l ") {
+		var naming_server = NamingProxy.NS{IP: "127.0.0.1", Port: 1024, OID: 0}
+		ft := naming_server.Lookup("File Transfer")
+		return Join(FTProxy.FT(ft).List(), "|") //transforma a lista de nomes de arquivos numa única String
 	} else {
-		c.Msgs[len(c.Msgs)] = Msg + ":" + User;
-		return
+		c.Msgs[len(c.Msgs)] = Msg + ":" + User
+		return "YOU SENT A MESSAGE"//status da operação com formato do tipo da função
 	}
 }
-func (c Chat) Listen(){
+func (c Chat) Listen() [] string {
 	return c.Msgs
 }
