@@ -1,17 +1,17 @@
 package Shared
 
 type AOR struct {
-	IP string,
-	port int,
-	oid int
+	IP string
+	Port int
+	OID int
 }
 
 type chatMsg struct{
-	msg string,
+	msg string
 	user string
 }
 
 type FTMsg struct{
-	file byte[],
+	file []byte
 	user string
 }
