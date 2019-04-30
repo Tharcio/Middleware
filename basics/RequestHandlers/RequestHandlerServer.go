@@ -7,8 +7,6 @@ import (
 	"net"
 )
 
-//É necessario função invoke em invoker que retorne []byte 
-
 type SRH struct {
 	IP string
 	Port int
@@ -16,7 +14,7 @@ type SRH struct {
 func (h SRH) Recieve() ([] byte, net.Conn) {
 	l, err := net.Listen("tcp",h.IP+string(h.Port))
 	if err !=nil {
-		fmt.Print("erro ao tentar escutar a porta "+string(h.Port)+" "+string(err.Error()))
+		fmt.Print("erro ao tentar escutar a porta "+string(h.Port)+", "+string(err.Error()))
 	}
 	conn, err2 := l.Accept()
 	if err2 !=nil {

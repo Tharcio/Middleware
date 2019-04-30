@@ -1,9 +1,9 @@
 package Requestor
 import (
-	"MiddlewareImplementation/basics/Shared"
+	"../Shared"
 	"encoding/json"
 	"fmt"
-	. "MiddlewareImplementation/basics/RequestHandlers"
+	. "../RequestHandlers"
 )
 
 func Invoke(remote_object Shared.AOR,typeMsg string, action string, args interface{}) interface{}{ //invoke tem que ser um método só
